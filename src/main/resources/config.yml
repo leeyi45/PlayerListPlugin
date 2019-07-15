@@ -1,0 +1,7 @@
+file-path: player.txt
+server-ip: 116.87.38.248
+discord:
+  command-prefix: !
+  token: null
+telegram:
+  token: null
