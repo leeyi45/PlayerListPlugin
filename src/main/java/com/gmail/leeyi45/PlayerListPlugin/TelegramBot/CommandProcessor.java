@@ -2,6 +2,7 @@ package com.gmail.leeyi45.PlayerListPlugin.TelegramBot;
 
 import com.gmail.leeyi45.PlayerListPlugin.PluginMain.Config;
 import com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin;
+import org.bukkit.Bukkit;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class CommandProcessor
     //!status command
     static String statusCommand()
     {
-        return String.format("<b>Server is currently running %s at %s</b>", "1.14.2", Config.getIP_String());
+        return String.format("<b>Server is currently running version %s at IP address: %s</b>", Bukkit.getServer().getVersion(), Config.getIP_String());
     }
 
     //!players command

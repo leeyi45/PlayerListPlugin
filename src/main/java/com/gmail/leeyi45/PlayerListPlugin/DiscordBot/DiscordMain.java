@@ -49,14 +49,12 @@ public class DiscordMain implements Runnable
         }
     }
 
-    public static final String token = "NDYwNDQ4ODk0MjQxNzM0NjY2.XSncQg.s1WJEoNsjkqoefwrn_9qcnUko8o";
-
     @Override
     public void run()
     {
         try
         {
-            //String token = Config.getDiscordToken();
+            String token = Config.getDiscordToken();
             initialized = false;
             PlayerListPlugin.logToConsole("Beginning discord bot initialization using " + token);
             bot = new JDABuilder(token).build();

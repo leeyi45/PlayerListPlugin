@@ -3,6 +3,7 @@ package com.gmail.leeyi45.PlayerListPlugin.DiscordBot;
 import com.gmail.leeyi45.PlayerListPlugin.PluginMain.Config;
 import com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin;
 import net.dv8tion.jda.core.entities.Message;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 
@@ -30,7 +31,7 @@ public class CommandProcessor
     //!status command
     static String statusCommand()
     {
-        return String.format("Server is currently running %s at %s", "1.14.2", Config.getIP_String());
+        return String.format("Server is currently running version %s at IP address: %s", Bukkit.getServer().getVersion(), Config.getIP_String());
     }
 
     //!players command

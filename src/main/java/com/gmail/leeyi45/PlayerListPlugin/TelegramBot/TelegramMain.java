@@ -1,5 +1,6 @@
 package com.gmail.leeyi45.PlayerListPlugin.TelegramBot;
 
+import com.gmail.leeyi45.PlayerListPlugin.PluginMain.Config;
 import com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -18,7 +19,7 @@ public class TelegramMain extends TelegramLongPollingBot implements Runnable
     public String getBotUsername() { return "leeyi45bot";}
 
     @Override
-    public String getBotToken() { return "773814416:AAH78Woebf1JG2D1Rv5c306NYvMDvnQVwA0"; }
+    public String getBotToken() { return Config.getTelegramToken(); }
 
     @Override
     public void onUpdateReceived(Update update)
@@ -82,6 +83,7 @@ public class TelegramMain extends TelegramLongPollingBot implements Runnable
             TelegramBotsApi bot = new TelegramBotsApi();
             session = bot.registerBot(this);
             initialized = true;
+            PlayerListPlugin.logToConsole("Telegram bot running");
         }
         catch(TelegramApiException e)
         {

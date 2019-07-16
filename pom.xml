@@ -26,13 +26,18 @@
                     <forceCreation>true</forceCreation>
                     <archive>
                         <manifestEntries>
-                            <Class-Path>./lib/tele.jar ./lib/JDA.jar</Class-Path>
+                            <Class-Path>./lib/telegrambots-${telegram.version}-jar-with-dependencies.jar ./lib/JDA-${discord.version}-withDependencies.jar</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+    
+    <properties>
+        <telegram.version>4.3.1</telegram.version>
+        <discord.version>3.8.3_464</discord.version>
+    </properties>
 
     <repositories>
         <repository>
@@ -51,14 +56,14 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.14.2-R0.1-SNAPSHOT</version>
+            <version>1.14.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.8.3_464</version>
+            <version>${discord.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>club.minnced</groupId>
@@ -70,7 +75,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
-            <version>4.3.1</version>
+            <version>${telegram.version}</version>
         </dependency>
     </dependencies>
 </project>
