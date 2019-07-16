@@ -1,4 +1,4 @@
-server-ip: 116.87.38.248
+server-ip: null
 discord:
   command-prefix: !
   token: null
