@@ -1,6 +1,6 @@
-package com.gmail.leeyi45.PlayerListPlugin.PluginMain;
+package com.gmail.leeyi45.PlayerListPlugin.pluginMain;
 
-import com.gmail.leeyi45.PlayerListPlugin.DiscordBot.DiscordMain;
+import com.gmail.leeyi45.PlayerListPlugin.discordBot.DiscordMain;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;

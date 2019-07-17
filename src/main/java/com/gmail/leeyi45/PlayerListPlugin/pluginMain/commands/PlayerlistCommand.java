@@ -1,16 +1,19 @@
-package com.gmail.leeyi45.PlayerListPlugin.PluginMain.Commands;
+package com.gmail.leeyi45.PlayerListPlugin.pluginMain.commands;
 
-import com.gmail.leeyi45.PlayerListPlugin.DiscordBot.DiscordMain;
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.Config;
+import com.gmail.leeyi45.PlayerListPlugin.discordBot.DiscordMain;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.chatManager.ChatListener;
 import com.gmail.leeyi45.PlayerListPlugin.util.MessageSender;
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin;
-import com.gmail.leeyi45.PlayerListPlugin.TelegramBot.TelegramMain;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
+import com.gmail.leeyi45.PlayerListPlugin.telegramBot.TelegramMain;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class PlayerlistCommand implements CommandExecutor
 {
@@ -29,13 +32,14 @@ public class PlayerlistCommand implements CommandExecutor
             }
         };
 
+        if(args.length == 0) return false;
 
-        switch(args[0])
+        switch(args[0].toLowerCase())
         {
             case "discord":
             {
                 if(commandSender instanceof Player &&
-                    commandSender.hasPermission("com.gmail.leeyi45.playerlist.discord"))
+                    !commandSender.hasPermission("com.gmail.leeyi45.playerlist.discord"))
                 {
                     sender.send("You do not have permission to use this command");
                     return true;
@@ -46,7 +50,7 @@ public class PlayerlistCommand implements CommandExecutor
             case "telegram":
             {
                 if(commandSender instanceof Player &&
-                        commandSender.hasPermission("com.gmail.leeyi45.playerlist.telegram"))
+                        !commandSender.hasPermission("com.gmail.leeyi45.playerlist.telegram"))
                 {
                     sender.send("You do not have permission to use this command");
                     return true;
@@ -65,14 +69,70 @@ public class PlayerlistCommand implements CommandExecutor
 
                 PlayerListPlugin.setPlayerList(newList);
                 DiscordMain.updateBot();
+                return true;
             }
+            /*
+            case "nick":
+            {
+                if (commandSender instanceof Player &&
+                        !commandSender.hasPermission("com.gmail.leeyi45.playerlist.nick"))
+                {
+                    sender.send("You do not have permission to use this command");
+                    return true;
+                }
+                else return nickCommand(args, sender);
+            }*/
             default: return false;
         }
     }
 
+    /*
+    private boolean nickCommand(String[] args, MessageSender sender)
+    {
+        if(args.length == 1) sender.send("Usage: /playerlist nick <set|get>");
+        else if(args.length >= 2)
+        {
+            switch (args[2])
+            {
+                case "set":
+                {
+                    if(args.length == 2 || args.length == 3) sender.send("Usage: /playerlist nick set <player> <nickname>");
+                    else
+                    {
+                        ChatListener.setNickname(args[2], args[3]);
+                    }
+                    break;
+                }
+                case "get":
+                {
+                    if(args.length == 2) sender.send("Usage: /playerlist nick get <player>");
+                    else
+                    {
+                        ArrayList<String> playerNames = PlayerListPlugin.getPlayerList();
+
+                        if(playerNames.contains(args[2]))
+                        {
+                            ArrayList<Player> players = PlayerListPlugin.getOnlinePlayers();
+                            sender.send(String.format("Player %s has nickname %s", args[2],
+                                    ChatListener.getNickname(args[2])));
+
+                        }
+                    }
+                    break;
+                }
+                default:
+                {
+                    sender.send("Usage: /playerlist nick <set|get>");
+                    break;
+                }
+            }
+        }
+        return true;
+    }*/
+
     private boolean telegramCommand(String[] args, MessageSender sender)
     {
-        if(args.length >= 2)
+        if(args.length >= 1)
         {
             switch(args[1])
             {
@@ -98,17 +158,17 @@ public class PlayerlistCommand implements CommandExecutor
                         }
                         case 3:
                         {
-                            sender.send("Usage: playerlist telegram token set <token>");
+                            sender.send("Usage: /playerlist telegram token set <token>");
                             break;
                         }
                         case 4:
                         {
-                            if(args[3].equalsIgnoreCase("set"))
+                            if(args[2].equalsIgnoreCase("set"))
                             {
-                                sender.send("Setting telegram token to: " + args[4]);
-                                Config.setTelegramToken(args[4]);
+                                sender.send("Setting telegram token to: " + args[3]);
+                                Config.setTelegramToken(args[3]);
                             }
-                            else sender.send("Usage: playerlist telegram token set <token>");
+                            else sender.send("Usage: /playerlist telegram token set <token>");
                             break;
                         }
                     }
@@ -116,7 +176,7 @@ public class PlayerlistCommand implements CommandExecutor
                 }
                 default:
                 {
-                    sender.send("Usage: playerlist telegram {disconnect|reconnect|token}");
+                    sender.send("Usage: /playerlist telegram <disconnect|reconnect|token>");
                     break;
                 }
             }
@@ -127,7 +187,7 @@ public class PlayerlistCommand implements CommandExecutor
 
     private boolean discordCommand(String[] args, MessageSender sender)
     {
-        if(args.length >= 2)
+        if(args.length >= 1)
         {
             switch(args[1])
             {
@@ -153,17 +213,17 @@ public class PlayerlistCommand implements CommandExecutor
                         }
                         case 3:
                         {
-                            sender.send("Usage: playerlist discord token set <token>");
+                            sender.send("Usage: /playerlist discord token set <token>");
                             break;
                         }
                         case 4:
                         {
-                            if(args[3].equalsIgnoreCase("set"))
+                            if(args[2].equalsIgnoreCase("set"))
                             {
-                                sender.send("Setting discord token to: " + args[4]);
+                                sender.send("Setting discord token to: " + args[3]);
                                 Config.setDiscordToken(args[4]);
                             }
-                            else sender.send("Usage: playerlist discord token set <token>");
+                            else sender.send("Usage: /playerlist discord token set <token>");
                             break;
                         }
                     }
@@ -171,7 +231,7 @@ public class PlayerlistCommand implements CommandExecutor
                 }
                 default:
                 {
-                    sender.send("Usage: playerlist discord {disconnect|reconnect|token}");
+                    sender.send("Usage: /playerlist discord <disconnect|reconnect|token>");
                     break;
                 }
             }

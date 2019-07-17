@@ -1,8 +1,8 @@
-package com.gmail.leeyi45.PlayerListPlugin.TelegramBot;
+package com.gmail.leeyi45.PlayerListPlugin.telegramBot;
 
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.Config;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
 import com.gmail.leeyi45.PlayerListPlugin.util.MessageSender;
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -37,7 +37,7 @@ public class TelegramMain extends TelegramLongPollingBot implements Runnable
 
                 if(args[0].contains("@" + getBotUsername()))
                 { //We need to remove the username string
-                    args[0] = args[0].substring(0, getBotUsername().length());
+                    args[0] = args[0].substring(0, getBotUsername().length() - 4);
                 }
 
                 String reply = CommandProcessor.processCommand(msg, args);
@@ -64,24 +64,29 @@ public class TelegramMain extends TelegramLongPollingBot implements Runnable
 
     public static void startThread(MessageSender sender)
     {
+        ApiContextInitializer.init();
+        instance = new TelegramMain();
         instance.sender = sender;
         if(initialized) stopBot(sender);
 
         instance.sender.send("Loading telegram bot");
-
-        ApiContextInitializer.init();
-        instance = new TelegramMain();
         new Thread(instance).start();
     }
 
     public static void stopBot(MessageSender sender)
     {
         sender.send("Stopping telegram bot");
-        if(instance != null)
-        {
-            instance.session.stop();
-            initialized = false;
-        }
+        new Thread(new Runnable() {
+           @Override
+           public void run()
+           {
+               if(instance != null)
+               {
+                   instance.session.stop();
+                   initialized = false;
+               }
+           }
+        }).start();
     }
 
     @Override

@@ -1,9 +1,9 @@
-package com.gmail.leeyi45.PlayerListPlugin.TelegramBot;
+package com.gmail.leeyi45.PlayerListPlugin.discordBot;
 
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.Config;
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
+import net.dv8tion.jda.core.entities.Message;
 import org.bukkit.Bukkit;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
 
@@ -31,7 +31,7 @@ public class CommandProcessor
     //!status command
     static String statusCommand()
     {
-        return String.format("<b>Server is currently running version %s at IP address: %s</b>", Bukkit.getServer().getVersion(), Config.getIP_String());
+        return String.format("Server is currently running version %s at IP address: %s", Bukkit.getServer().getVersion(), Config.getIP_String());
     }
 
     //!players command
@@ -42,7 +42,7 @@ public class CommandProcessor
         if(players.size() == 0) return "There are no players on the server";
         else
         {
-            StringBuilder outputStr = new StringBuilder("<b>Players on the server:</b>\n\n");
+            StringBuilder outputStr = new StringBuilder("Players on the server:\n\n");
 
             int i = 1;
             for (String str : players)

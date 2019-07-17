@@ -1,4 +1,4 @@
-package com.gmail.leeyi45.PlayerListPlugin.PluginMain;
+package com.gmail.leeyi45.PlayerListPlugin.pluginMain;
 
 import org.bukkit.configuration.file.FileConfiguration;
 

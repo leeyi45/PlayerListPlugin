@@ -1,7 +1,7 @@
-package com.gmail.leeyi45.PlayerListPlugin.DiscordBot;
+package com.gmail.leeyi45.PlayerListPlugin.discordBot;
 
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.Config;
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -19,7 +19,7 @@ public class MessageListener extends ListenerAdapter
             Message msg = event.getMessage();
             String msgText = msg.getContentStripped();
 
-            if(msgText.startsWith("!"))
+            if(msgText.startsWith(Config.discordCommandPrefix()))
             { //Message is actually a command
 
                 //We remove the command prefix

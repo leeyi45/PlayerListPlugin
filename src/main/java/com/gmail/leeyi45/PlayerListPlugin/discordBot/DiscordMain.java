@@ -1,8 +1,8 @@
-package com.gmail.leeyi45.PlayerListPlugin.DiscordBot;
+package com.gmail.leeyi45.PlayerListPlugin.discordBot;
 
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.Config;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
 import com.gmail.leeyi45.PlayerListPlugin.util.MessageSender;
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
@@ -30,8 +30,11 @@ public class DiscordMain implements Runnable
 
     public static void stopBot(MessageSender sender)
     {
-        sender.send("Shutting discord bot down");
-        bot.shutdown();
+        if(bot != null)
+        {
+            sender.send("Shutting discord bot down");
+            bot.shutdown();
+        }
     }
 
     public static void updateBot()

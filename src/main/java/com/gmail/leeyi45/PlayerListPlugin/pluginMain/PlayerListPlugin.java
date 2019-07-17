@@ -1,11 +1,13 @@
-package com.gmail.leeyi45.PlayerListPlugin.PluginMain;
+package com.gmail.leeyi45.PlayerListPlugin.pluginMain;
 
-import com.gmail.leeyi45.PlayerListPlugin.PluginMain.Commands.PlayerlistCommand;
-import com.gmail.leeyi45.PlayerListPlugin.DiscordBot.DiscordMain;
-import com.gmail.leeyi45.PlayerListPlugin.TelegramBot.TelegramMain;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.commands.PlayerlistCommand;
+import com.gmail.leeyi45.PlayerListPlugin.discordBot.DiscordMain;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.chatManager.ChatListener;
+import com.gmail.leeyi45.PlayerListPlugin.telegramBot.TelegramMain;
 import com.gmail.leeyi45.PlayerListPlugin.util.MessageSender;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
@@ -26,6 +28,8 @@ public class PlayerListPlugin extends JavaPlugin
     public static void setPlayerList(ArrayList<String> list) { playerList = list; }
 
     public static ArrayList<String> getPlayerList() { return playerList; }
+
+    public static ArrayList<Player> getOnlinePlayers() { return (ArrayList<Player>)instance.getServer().getOnlinePlayers(); }
 
     public static int getPlayerCount() { return playerList.size(); }
 
@@ -85,7 +89,8 @@ public class PlayerListPlugin extends JavaPlugin
         {
             try
             {
-                getCommand(item.getKey()).setExecutor(item.getValue());
+                //getCommand(item.getKey()).setExecutor(item.getValue());
+                getCommand("playerlist").setExecutor(new PlayerlistCommand());
             }
             catch(NullPointerException e)
             {
@@ -97,6 +102,8 @@ public class PlayerListPlugin extends JavaPlugin
 
     private void registerEvents()
     {
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+        PluginManager manager = getServer().getPluginManager();
+        manager.registerEvents(new PlayerListener(), this);
+        manager.registerEvents(new ChatListener(), this);
     }
 }

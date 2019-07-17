@@ -1,8 +1,8 @@
 name: PlayerListPlugin
 version: 1.1
-main: com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin
+main: com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin
 commands:
   playerlist:
     description: Command to manage the playerlist plugin
-    usage: /playerlist {discord|telegram|update}
+    usage: /playerlist <discord|telegram|update|nick>
     permission: com.gmail.leeyi45.playerlist
