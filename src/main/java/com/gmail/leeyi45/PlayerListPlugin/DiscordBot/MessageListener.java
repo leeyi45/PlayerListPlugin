@@ -7,6 +7,8 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
+import java.util.logging.Level;
+
 public class MessageListener extends ListenerAdapter
 {
     @Override
@@ -29,7 +31,7 @@ public class MessageListener extends ListenerAdapter
                 //And reply to the channel that sent it
                 event.getTextChannel().sendMessage(reply).queue();
                 PlayerListPlugin.logToConsole(String.format("Command '%s' received from user '%s' from channel '%s'",
-                        args[0], event.getMember().getEffectiveName(), event.getChannel().getName()));
+                        args[0], event.getMember().getEffectiveName(), event.getChannel().getName()), Level.INFO);
             }
         }
 

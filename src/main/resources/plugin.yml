@@ -2,15 +2,7 @@ name: PlayerListPlugin
 version: 1.1
 main: com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin
 commands:
-  playerlist-update:
-    description: Forces the plugin to update the internal player list
-    usage: /playerlist-update
-    permission: com.gmail.leeyi45.playerlist.update
-  playerlist-discord:
-    description: Commands relating to the discord bot
-    usage: /playerlist-discord {reconnect|disconnect}
-    permission: com.gmail.leeyi45.playerlist.discord
-  playerlist-tele:
-    description: Commands relating to the telegram bot
-    usage: /playerlist-tele {reconnect|disconnect}
-    permission: com.gmail.leeyi45.playerlist.telegram
+  playerlist:
+    description: Command to manage the playerlist plugin
+    usage: /playerlist {discord|telegram|update}
+    permission: com.gmail.leeyi45.playerlist

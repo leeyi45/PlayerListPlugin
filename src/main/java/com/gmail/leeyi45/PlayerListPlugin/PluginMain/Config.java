@@ -4,27 +4,25 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config
 {
-    private static String discordCommandPrefix;
-    private static String IP_String;
-    private static String discordToken;
-    private static String telegramToken;
+    private static FileConfiguration config;
 
-    public static String discordCommandPrefix() { return discordCommandPrefix; }
+    public static String discordCommandPrefix() { return config.getString("discord.command-prefix"); }
 
-    public static String getIP_String() { return IP_String; }
+    public static String getIP_String() { return config.getString("server-ip"); }
 
-    public static String getDiscordToken() { return discordToken; }
+    public static String getDiscordToken() { return config.getString("discord.token"); }
 
-    public static void loadConfig(FileConfiguration config)
-    {
-        discordCommandPrefix = config.getString("discord.command-prefix");
-        IP_String = config.getString("server-ip");
-        discordToken = config.getString("discord.token");
-        telegramToken = config.getString("telegram.token");
-    }
+    public static void setDiscordToken(String token) { config.set("discord.token", token); }
 
     public static String getTelegramToken()
     {
-        return telegramToken;
+        return config.getString("telegram.token");
+    }
+
+    public static void setConfig(FileConfiguration cfg) { config = cfg; }
+
+    public static void setTelegramToken(String arg)
+    {
+        config.set("telegram.token", arg);
     }
 }

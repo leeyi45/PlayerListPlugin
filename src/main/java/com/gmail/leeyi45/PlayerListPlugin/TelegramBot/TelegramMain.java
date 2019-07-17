@@ -1,6 +1,7 @@
 package com.gmail.leeyi45.PlayerListPlugin.TelegramBot;
 
 import com.gmail.leeyi45.PlayerListPlugin.PluginMain.Config;
+import com.gmail.leeyi45.PlayerListPlugin.util.MessageSender;
 import com.gmail.leeyi45.PlayerListPlugin.PluginMain.PlayerListPlugin;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -16,7 +17,7 @@ import java.util.logging.Level;
 public class TelegramMain extends TelegramLongPollingBot implements Runnable
 {
     @Override
-    public String getBotUsername() { return "leeyi45bot";}
+    public String getBotUsername() { return "leeyi45bot"; }
 
     @Override
     public String getBotToken() { return Config.getTelegramToken(); }
@@ -32,7 +33,13 @@ public class TelegramMain extends TelegramLongPollingBot implements Runnable
             if(msgText.startsWith("/"))
             {
                 String[] args = msgText.substring(1).split(" ");
-                PlayerListPlugin.logToConsole(String.format("Command '%s' received from '%s'", args[0], msg.getFrom().getUserName()));
+                PlayerListPlugin.logToConsole(String.format("Command '%s' received from '%s'", args[0], msg.getFrom().getUserName()), Level.INFO);
+
+                if(args[0].contains("@" + getBotUsername()))
+                { //We need to remove the username string
+                    args[0] = args[0].substring(0, getBotUsername().length());
+                }
+
                 String reply = CommandProcessor.processCommand(msg, args);
 
                 SendMessage send = new SendMessage()
@@ -50,25 +57,27 @@ public class TelegramMain extends TelegramLongPollingBot implements Runnable
     }
 
     private BotSession session;
+    private MessageSender sender;
 
     private static TelegramMain instance;
     private static boolean initialized = false;
 
-    public static void startThread()
+    public static void startThread(MessageSender sender)
     {
-        if(initialized) stopBot();
+        instance.sender = sender;
+        if(initialized) stopBot(sender);
 
-        PlayerListPlugin.logToConsole("Loading telegram bot");
+        instance.sender.send("Loading telegram bot");
 
         ApiContextInitializer.init();
         instance = new TelegramMain();
         new Thread(instance).start();
     }
 
-    public static void stopBot()
+    public static void stopBot(MessageSender sender)
     {
-        PlayerListPlugin.logToConsole("Stopping telegram bot");
-        if(instance.session.isRunning())
+        sender.send("Stopping telegram bot");
+        if(instance != null)
         {
             instance.session.stop();
             initialized = false;
@@ -83,15 +92,15 @@ public class TelegramMain extends TelegramLongPollingBot implements Runnable
             TelegramBotsApi bot = new TelegramBotsApi();
             session = bot.registerBot(this);
             initialized = true;
-            PlayerListPlugin.logToConsole("Telegram bot running");
+            sender.send("Telegram bot running");
         }
         catch(TelegramApiException e)
         {
-            PlayerListPlugin.logToConsole("Error occurred when trying to connect to the telegram api", Level.SEVERE);
+            sender.send("Error occurred when trying to connect to the telegram api");
         }
         catch(NoClassDefFoundError e)
         {
-            PlayerListPlugin.logToConsole("Did not locate tele.jar, check lib folder", Level.SEVERE);
+            sender.send("Did not locate tele.jar, check lib folder");
         }
     }
 }
