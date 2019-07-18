@@ -19,11 +19,12 @@ public class ChatListener implements Listener
         Player player = e.getPlayer();
         String msg = e.getMessage();
 
-        //If players have permission to use colour chat it gives it to them
-        if(player.hasPermission("com.gmail.leeyi45.playerlist.colorchat"))
+        msg = ChatColor.translateAlternateColorCodes('&', msg);
+        /*If players have permission to use colour chat it gives it to them
+        if(player.hasPermission("playerlist.colorchat"))
         {
-            msg = ChatColor.translateAlternateColorCodes('&', msg);
-        }
+            maybe for some implementation in the future
+        }*/
 
         e.setMessage(String.format("[%s] %s", player.getDisplayName(), msg));
     }

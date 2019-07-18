@@ -1,22 +1,22 @@
 package com.gmail.leeyi45.PlayerListPlugin.discordBot;
 
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
-import com.gmail.leeyi45.PlayerListPlugin.util.MessageSender;
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.managers.Presence;
+import org.bukkit.command.CommandSender;
 
 public class DiscordMain implements Runnable
 {
     private static JDA bot;
     private static Boolean initialized = false;
+    private CommandSender sender;
     public static Boolean getInitialized() { return initialized; }
-    private MessageSender sender;
 
-    public static void startThread(MessageSender sender)
+    public static void startThread(CommandSender sender)
     {
         DiscordMain instance = new DiscordMain();
         instance.sender = sender;
@@ -28,11 +28,11 @@ public class DiscordMain implements Runnable
         new Thread(instance).start();
     }
 
-    public static void stopBot(MessageSender sender)
+    public static void stopBot(CommandSender sender)
     {
         if(bot != null)
         {
-            sender.send("Shutting discord bot down");
+            sender.sendMessage("Shutting discord bot down");
             bot.shutdown();
         }
     }
@@ -63,23 +63,23 @@ public class DiscordMain implements Runnable
         {
             String token = Config.getDiscordToken();
             initialized = false;
-            sender.send("Beginning discord bot initialization using " + token);
+            sender.sendMessage("Beginning discord bot initialization using " + token);
             bot = new JDABuilder(token).build();
 
             registerListeners();
 
-            sender.send("Discord bot initialized");
+            sender.sendMessage("Discord bot initialized");
             initialized = true;
 
             updateBot();
         }
         catch(javax.security.auth.login.LoginException e)
         {
-            sender.send("Login exception when setting up the discord bot");
+            sender.sendMessage("Login exception when setting up the discord bot");
         }
         catch(NoClassDefFoundError e)
         {
-            sender.send("Did not locate JDA.jar, check lib folder");
+            sender.sendMessage("Did not locate JDA.jar, check lib folder");
         }
     }
 

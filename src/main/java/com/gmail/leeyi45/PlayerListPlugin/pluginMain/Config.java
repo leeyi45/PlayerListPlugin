@@ -6,7 +6,7 @@ public class Config
 {
     private static FileConfiguration config;
 
-    public static String discordCommandPrefix() { return config.getString("discord.command-prefix"); }
+    public static String discordCommandPrefix() { return config.getString("discord.command-prefix", "!"); }
 
     public static String getIP_String() { return config.getString("server-ip"); }
 

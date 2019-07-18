@@ -1,8 +1,8 @@
 package com.gmail.leeyi45.PlayerListPlugin.telegramBot;
 
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
-import com.gmail.leeyi45.PlayerListPlugin.util.MessageSender;
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
+import org.bukkit.command.CommandSender;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -14,7 +14,7 @@ import org.telegram.telegrambots.meta.generics.BotSession;
 
 import java.util.logging.Level;
 
-public class TelegramMain extends TelegramLongPollingBot implements Runnable
+public class TelegramMain extends TelegramLongPollingBot
 {
     @Override
     public String getBotUsername() { return "leeyi45bot"; }
@@ -56,56 +56,56 @@ public class TelegramMain extends TelegramLongPollingBot implements Runnable
         }
     }
 
-    private BotSession session;
-    private MessageSender sender;
+    private static BotSession session;
+    private static CommandSender cmdSender;
 
-    private static TelegramMain instance;
     private static boolean initialized = false;
 
-    public static void startThread(MessageSender sender)
+    public static void startThread(CommandSender sender)
     {
         ApiContextInitializer.init();
-        instance = new TelegramMain();
-        instance.sender = sender;
+        cmdSender = sender;
         if(initialized) stopBot(sender);
 
-        instance.sender.send("Loading telegram bot");
-        new Thread(instance).start();
+        sender.sendMessage("Loading telegram bot");
+
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    TelegramBotsApi bot = new TelegramBotsApi();
+                    session = bot.registerBot(new TelegramMain());
+                    initialized = true;
+                    cmdSender.sendMessage("Telegram bot running");
+                }
+                catch(TelegramApiException e)
+                {
+                    cmdSender.sendMessage("Error occurred when trying to connect to the telegram api");
+                }
+                catch(NoClassDefFoundError e)
+                {
+                    cmdSender.sendMessage("Did not locate tele.jar, check lib folder");
+                }
+            }
+        }).start();
     }
 
-    public static void stopBot(MessageSender sender)
+    public static void stopBot(CommandSender sender)
     {
-        sender.send("Stopping telegram bot");
+        sender.sendMessage("Stopping telegram bot");
         new Thread(new Runnable() {
            @Override
            public void run()
            {
-               if(instance != null)
+               if(session != null)
                {
-                   instance.session.stop();
+                   session.stop();
                    initialized = false;
                }
            }
         }).start();
-    }
-
-    @Override
-    public void run()
-    {
-        try
-        {
-            TelegramBotsApi bot = new TelegramBotsApi();
-            session = bot.registerBot(this);
-            initialized = true;
-            sender.send("Telegram bot running");
-        }
-        catch(TelegramApiException e)
-        {
-            sender.send("Error occurred when trying to connect to the telegram api");
-        }
-        catch(NoClassDefFoundError e)
-        {
-            sender.send("Did not locate tele.jar, check lib folder");
-        }
     }
 }
