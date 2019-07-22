@@ -61,7 +61,7 @@ public class PlayerlistCommand implements CommandExecutor
 
     private boolean telegramCommand(String[] args, CommandSender sender)
     {
-        if(args.length >= 1)
+        if(args.length >= 2)
         {
             switch(args[1])
             {
@@ -116,7 +116,7 @@ public class PlayerlistCommand implements CommandExecutor
 
     private boolean discordCommand(String[] args, CommandSender sender)
     {
-        if(args.length >= 1)
+        if(args.length >= 2)
         {
             switch(args[1])
             {
