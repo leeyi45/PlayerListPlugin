@@ -33,13 +33,13 @@ public class TelegramMain extends TelegramLongPollingBot
             if(msgText.startsWith("/"))
             {
                 String[] args = msgText.substring(1).split(" ");
-                PlayerListPlugin.logToConsole(String.format("Command '%s' received from '%s'", args[0], msg.getFrom().getUserName()), Level.INFO);
 
                 if(args[0].contains("@" + getBotUsername()))
                 { //We need to remove the username string
                     args[0] = args[0].substring(0, getBotUsername().length() - 4);
                 }
 
+                PlayerListPlugin.logToConsole(String.format("Command '%s' received from '%s'", args[0], msg.getFrom().getUserName()), Level.INFO);
                 String reply = CommandProcessor.processCommand(msg, args);
 
                 SendMessage send = new SendMessage()
