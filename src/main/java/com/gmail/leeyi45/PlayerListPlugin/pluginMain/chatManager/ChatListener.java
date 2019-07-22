@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.server.ServerCommandEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,19 @@ public class ChatListener implements Listener
             maybe for some implementation in the future
         }*/
 
-        e.setMessage(String.format("[%s] %s", player.getDisplayName(), msg));
+        e.setMessage(msg);
+    }
+
+    @EventHandler
+    public void onServerCommandEvent(ServerCommandEvent event)
+    {
+        String cmd = event.getCommand();
+        String[] args = cmd.split(" ");
+
+        if(args[0].equalsIgnoreCase("say"))
+        {
+            event.setCommand(ChatColor.translateAlternateColorCodes('&', cmd));
+        }
     }
 
     /*
