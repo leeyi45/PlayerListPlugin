@@ -65,6 +65,11 @@ public class PlayerlistCommand implements CommandExecutor
         {
             switch(args[1])
             {
+                case "status":
+                {
+                    sender.sendMessage("The telegram bot is currently " + (TelegramMain.getInitialized() ? "online" : "offline"));
+                    break;
+                }
                 case "reconnect":
                 {
                     TelegramMain.stopBot(sender);
@@ -105,7 +110,7 @@ public class PlayerlistCommand implements CommandExecutor
                 }
                 default:
                 {
-                    sender.sendMessage("Usage: /playerlist telegram <disconnect|reconnect|token>");
+                    sender.sendMessage("Usage: /playerlist telegram <disconnect|reconnect|token|status>");
                     break;
                 }
             }
@@ -120,6 +125,11 @@ public class PlayerlistCommand implements CommandExecutor
         {
             switch(args[1])
             {
+                case "status":
+                {
+                    sender.sendMessage("The discord bot is currently " + (DiscordMain.getInitialized() ? "online" : "offline"));
+                    break;
+                }
                 case "reconnect":
                 {
                     DiscordMain.stopBot(sender);
@@ -160,7 +170,7 @@ public class PlayerlistCommand implements CommandExecutor
                 }
                 default:
                 {
-                    sender.sendMessage("Usage: /playerlist discord <disconnect|reconnect|token>");
+                    sender.sendMessage("Usage: /playerlist discord <disconnect|reconnect|token|status>");
                     break;
                 }
             }

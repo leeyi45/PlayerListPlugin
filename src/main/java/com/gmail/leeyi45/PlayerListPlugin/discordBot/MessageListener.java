@@ -34,6 +34,5 @@ public class MessageListener extends ListenerAdapter
                         args[0], event.getMember().getEffectiveName(), event.getChannel().getName()), Level.INFO);
             }
         }
-
     }
 }

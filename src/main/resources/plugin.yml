@@ -4,5 +4,5 @@ main: com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin
 commands:
   playerlist:
     description: Command to manage the playerlist plugin
-    usage: /playerlist <discord|telegram|update|nick>
-    permission: com.gmail.leeyi45.playerlist
+    usage: /playerlist <discord|telegram|update>
+    permission: playerlist

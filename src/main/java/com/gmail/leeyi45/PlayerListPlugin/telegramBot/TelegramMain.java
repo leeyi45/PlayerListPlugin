@@ -13,6 +13,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.BotSession;
 
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TelegramMain extends TelegramLongPollingBot
 {
@@ -28,6 +30,10 @@ public class TelegramMain extends TelegramLongPollingBot
         if(update.hasMessage() && update.getMessage().hasText())
         {
             Message msg = update.getMessage();
+
+            //Messages that are before start don't process
+            //if(msg.getDate() < startTime) return;
+
             String msgText = msg.getText();
 
             if(msgText.startsWith("/"))
@@ -36,14 +42,14 @@ public class TelegramMain extends TelegramLongPollingBot
 
                 if(args[0].contains("@" + getBotUsername()))
                 { //We need to remove the username string
-                    args[0] = args[0].substring(0, getBotUsername().length() - 4);
+                    Matcher matcher = Pattern.compile(".+?(?=@)").matcher(args[0]);
+                    args[0] = matcher.group(1);
                 }
 
                 PlayerListPlugin.logToConsole(String.format("Command '%s' received from '%s'", args[0], msg.getFrom().getUserName()), Level.INFO);
-                String reply = CommandProcessor.processCommand(msg, args);
 
                 SendMessage send = new SendMessage()
-                        .setText(reply)
+                        .setText(CommandProcessor.processCommand(msg, args))
                         .enableHtml(true)
                         .setChatId(msg.getChatId());
 
@@ -57,38 +63,39 @@ public class TelegramMain extends TelegramLongPollingBot
     }
 
     private static BotSession session;
-    private static CommandSender cmdSender;
+    private static long startTime;
 
     private static boolean initialized = false;
+    public static boolean getInitialized() { return initialized; }
 
     public static void startThread(CommandSender sender)
     {
-        ApiContextInitializer.init();
-        cmdSender = sender;
-        if(initialized) stopBot(sender);
+        try
+        {
+            if(initialized) stopBot(sender);
+            ApiContextInitializer.init();
+        }
+        catch(NoClassDefFoundError e)
+        {
+            sender.sendMessage("Did not locate tele.jar, check lib folder");
+            return;
+        }
 
         sender.sendMessage("Loading telegram bot");
 
-        new Thread(new Runnable()
+        new Thread(() ->
         {
-            @Override
-            public void run()
+            try
             {
-                try
-                {
-                    TelegramBotsApi bot = new TelegramBotsApi();
-                    session = bot.registerBot(new TelegramMain());
-                    initialized = true;
-                    cmdSender.sendMessage("Telegram bot running");
-                }
-                catch(TelegramApiException e)
-                {
-                    cmdSender.sendMessage("Error occurred when trying to connect to the telegram api");
-                }
-                catch(NoClassDefFoundError e)
-                {
-                    cmdSender.sendMessage("Did not locate tele.jar, check lib folder");
-                }
+                TelegramBotsApi bot = new TelegramBotsApi();
+                session = bot.registerBot(new TelegramMain());
+                initialized = true;
+                startTime = System.currentTimeMillis();
+                sender.sendMessage("Telegram bot running");
+            }
+            catch(TelegramApiException e)
+            {
+                sender.sendMessage("Error occurred when trying to connect to the telegram api");
             }
         }).start();
     }
@@ -96,16 +103,13 @@ public class TelegramMain extends TelegramLongPollingBot
     public static void stopBot(CommandSender sender)
     {
         sender.sendMessage("Stopping telegram bot");
-        new Thread(new Runnable() {
-           @Override
-           public void run()
-           {
-               if(session != null)
-               {
-                   session.stop();
-                   initialized = false;
-               }
-           }
+        new Thread(() ->
+        {
+            if(session != null)
+            {
+                session.stop();
+                initialized = false;
+            }
         }).start();
     }
 }

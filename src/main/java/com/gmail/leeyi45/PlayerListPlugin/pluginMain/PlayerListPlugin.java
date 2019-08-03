@@ -2,9 +2,7 @@ package com.gmail.leeyi45.PlayerListPlugin.pluginMain;
 
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.commands.PlayerlistCommand;
 import com.gmail.leeyi45.PlayerListPlugin.discordBot.DiscordMain;
-import com.gmail.leeyi45.PlayerListPlugin.pluginMain.chatManager.ChatListener;
 import com.gmail.leeyi45.PlayerListPlugin.telegramBot.TelegramMain;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -26,8 +24,6 @@ public class PlayerListPlugin extends JavaPlugin
 
     public static ArrayList<String> getPlayerList() { return playerList; }
 
-    public static ArrayList<Player> getOnlinePlayers() { return (ArrayList<Player>)instance.getServer().getOnlinePlayers(); }
-
     public static int getPlayerCount() { return playerList.size(); }
 
     public static void addPlayer(String name) { playerList.add(name); }
@@ -48,12 +44,13 @@ public class PlayerListPlugin extends JavaPlugin
 
         logToConsole("Enabling PlayerListPlugin!", Level.INFO);
 
+        //Basic setup
+        Config.setConfig(getConfig());
+
         //Start the bots
         DiscordMain.startThread(getConsoleSender());
         TelegramMain.startThread(getConsoleSender());
 
-        //Basic setup
-        Config.setConfig(getConfig());
         registerCommands();
         registerEvents();
 
@@ -74,11 +71,12 @@ public class PlayerListPlugin extends JavaPlugin
 
     private void registerCommands()
     {
-        Map<String, CommandExecutor> dict = new HashMap<>();
+        /*
+        var dict = new HashMap<String, CommandExecutor>();
 
         dict.put("playerlist", new PlayerlistCommand());
 
-        for(Map.Entry<String, CommandExecutor> item : dict.entrySet())
+        for(var item : dict.entrySet())
         {
             try
             {
@@ -90,6 +88,14 @@ public class PlayerListPlugin extends JavaPlugin
                 logToConsole(String.format("Error occurred when registering command '%s' check plugin yml",
                         item.getKey()), Level.SEVERE);
             }
+        }*/
+        try
+        {
+            getCommand("playerlist").setExecutor(new PlayerlistCommand());
+        }
+        catch(NullPointerException e)
+        {
+            logToConsole("NullPointerException occurred when registering playerlist command", Level.SEVERE);
         }
     }
 
@@ -97,6 +103,6 @@ public class PlayerListPlugin extends JavaPlugin
     {
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new PlayerListener(), this);
-        manager.registerEvents(new ChatListener(), this);
+
     }
 }

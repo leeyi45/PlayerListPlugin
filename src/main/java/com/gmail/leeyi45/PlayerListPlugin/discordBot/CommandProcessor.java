@@ -23,9 +23,9 @@ public class CommandProcessor
     //!help command
     static String helpCommand()
     {
-        return "status - Displays the server status" +
-                "players - Lists online players" +
-                "help - Displays this command";
+        return "status - Displays the server status\n" +
+                "players - Lists online players\n" +
+                "help - Displays this command\n";
     }
 
     //!status command

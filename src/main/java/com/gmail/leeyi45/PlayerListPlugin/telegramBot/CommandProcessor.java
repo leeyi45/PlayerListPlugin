@@ -6,10 +6,12 @@ import org.bukkit.Bukkit;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class CommandProcessor
+class CommandProcessor
 {
-    public static String processCommand(Message msg, String[] args)
+    static String processCommand(Message msg, String[] args)
     {
         switch(args[0])
         {
@@ -21,21 +23,24 @@ public class CommandProcessor
     }
 
     //!help command
-    static String helpCommand()
+    private static String helpCommand()
     {
-        return "status - Displays the server status" +
-                "players - Lists online players" +
+        return "status - Displays the server status\n" +
+                "players - Lists online players\n" +
                 "help - Displays this command";
     }
 
     //!status command
-    static String statusCommand()
+    private static String statusCommand()
     {
-        return String.format("<b>Server is currently running version %s at IP address: %s</b>", Bukkit.getServer().getVersion(), Config.getIP_String());
+        //Matcher matcher = Pattern.compile("1\\.(\\d{1,2})(\\.\\d)?").matcher(Bukkit.getServer().getVersion());
+
+        return String.format("Server is currently running version <b>%s</b> at IP address: <b>%s</b>",
+                Bukkit.getServer().getVersion(), Config.getIP_String());
     }
 
     //!players command
-    static String playersCommand()
+    private static String playersCommand()
     {
         ArrayList<String> players = PlayerListPlugin.getPlayerList();
 
