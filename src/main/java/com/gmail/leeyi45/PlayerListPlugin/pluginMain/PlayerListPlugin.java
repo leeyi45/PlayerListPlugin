@@ -22,13 +22,17 @@ public class PlayerListPlugin extends JavaPlugin
 
     public static void setPlayerList(ArrayList<String> list) { playerList = list; }
 
-    public static ArrayList<String> getPlayerList() { return playerList; }
+    public static ArrayList<String> getPlayerList()
+    {
+        var output = new ArrayList<String>();
+        for(Player p : instance.getServer().getOnlinePlayers())
+        {
+            output.add(p.getDisplayName());
+        }
+        return output;
+    }
 
     public static int getPlayerCount() { return playerList.size(); }
-
-    public static void addPlayer(String name) { playerList.add(name); }
-
-    public static void removePlayer(String name) { playerList.remove(name); }
 
     public static PlayerListPlugin getInstance() { return instance; }
 

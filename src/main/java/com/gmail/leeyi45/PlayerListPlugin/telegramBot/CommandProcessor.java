@@ -18,6 +18,7 @@ class CommandProcessor
             case "status": return statusCommand();
             case "players": return playersCommand();
             case "help": return helpCommand();
+            case "chat": return chatListenerCommand(msg, args);
             default: return String.format("Unknown command '%s'", args[0]);
         }
     }
@@ -33,7 +34,7 @@ class CommandProcessor
     //!status command
     private static String statusCommand()
     {
-        //Matcher matcher = Pattern.compile("1\\.(\\d{1,2})(\\.\\d)?").matcher(Bukkit.getServer().getVersion());
+        //Matcher matcher = Pattern.compile("1\\.(\\d{1,2})(\\.\\d)?").matcher();
 
         return String.format("Server is currently running version <b>%s</b> at IP address: <b>%s</b>",
                 Bukkit.getServer().getVersion(), Config.getIP_String());
@@ -58,5 +59,27 @@ class CommandProcessor
 
             return outputStr.toString();
         }
+    }
+
+    //!chat command
+    private static String chatListenerCommand(Message msg, String[] args)
+    {
+        if(args.length > 1)
+        {
+            if (msg.getFrom().getId() == Config.getTelegramAdmin())
+            {
+                switch (args[1].toLowerCase())
+                {
+                    case "toggle":
+                        TelegramMain.setChatListening(!TelegramMain.getChatListening());
+                    case "status":
+                        return "<b>Chat listening is " + (TelegramMain.getChatListening() ? "active" : "inactive") + "</b>";
+                    default:
+                        return String.format("Unknown argument '%s'", args[0]);
+                }
+            }
+            else return "You do not have permission to use this command";
+        }
+        else return "Usage: /chat {toggle|status}";
     }
 }

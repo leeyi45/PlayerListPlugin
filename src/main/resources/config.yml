@@ -4,3 +4,4 @@ discord:
   token: null
 telegram:
   token: null
+  admin: null

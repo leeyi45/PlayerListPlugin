@@ -2,6 +2,7 @@ package com.gmail.leeyi45.PlayerListPlugin.telegramBot;
 
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -32,7 +33,7 @@ public class TelegramMain extends TelegramLongPollingBot
             Message msg = update.getMessage();
 
             //Messages that are before start don't process
-            //if(msg.getDate() < startTime) return;
+            if(msg.getDate() < startTime) return;
 
             String msgText = msg.getText();
 
@@ -48,21 +49,32 @@ public class TelegramMain extends TelegramLongPollingBot
 
                 PlayerListPlugin.logToConsole(String.format("Command '%s' received from '%s'", args[0], msg.getFrom().getUserName()), Level.INFO);
 
-                SendMessage send = new SendMessage()
-                        .setText(CommandProcessor.processCommand(msg, args))
-                        .enableHtml(true)
-                        .setChatId(msg.getChatId());
+                String reply = CommandProcessor.processCommand(msg, args);
 
-                try { execute(send); }
-                catch(TelegramApiException e)
+                if(!reply.isEmpty() && !reply.isBlank())
                 {
-                    PlayerListPlugin.logToConsole("Error occurred when replying to telegram message", Level.SEVERE);
+                    var send = new SendMessage()
+                            .setText(reply)
+                            .enableHtml(true)
+                            .setChatId(msg.getChatId());
+
+                    try { execute(send); }
+                    catch(TelegramApiException e)
+                    {
+                        PlayerListPlugin.logToConsole("Error occurred when replying to telegram message", Level.SEVERE);
+                    }
                 }
+            }
+            //Telegram messages sent to server
+            else if(chatListening && msg.getFrom().getId() == (long)Config.getTelegramAdmin())
+            {
+                Bukkit.broadcastMessage("[Server] " + msgText);
             }
         }
     }
 
     private static BotSession session;
+    private static TelegramLongPollingBot bot;
     private static long startTime;
 
     private static boolean initialized = false;
@@ -87,10 +99,11 @@ public class TelegramMain extends TelegramLongPollingBot
         {
             try
             {
-                TelegramBotsApi bot = new TelegramBotsApi();
-                session = bot.registerBot(new TelegramMain());
+                TelegramBotsApi botApi = new TelegramBotsApi();
+                bot = new TelegramMain();
+                session = botApi.registerBot(bot);
                 initialized = true;
-                startTime = System.currentTimeMillis();
+                startTime = System.currentTimeMillis() / 1000;
                 sender.sendMessage("Telegram bot running");
             }
             catch(TelegramApiException e)
@@ -102,14 +115,36 @@ public class TelegramMain extends TelegramLongPollingBot
 
     public static void stopBot(CommandSender sender)
     {
-        sender.sendMessage("Stopping telegram bot");
         new Thread(() ->
         {
-            if(session != null)
+            if(session != null && session.isRunning())
             {
+                sender.sendMessage("Stopping telegram bot");
                 session.stop();
-                initialized = false;
             }
+            initialized = false;
         }).start();
+    }
+
+    private static boolean chatListening = false;
+
+    public static boolean getChatListening() { return chatListening; }
+    public static void setChatListening(boolean value) { chatListening = value; }
+
+    //Server messages sent to telegram
+    public static void chatListenerMessage(String msg)
+    {
+        if(initialized)
+        {
+            var send = new SendMessage()
+                    .setText(msg)
+                    .enableHtml(true)
+                    .setChatId((long) Config.getTelegramAdmin());
+            try { bot.execute(send); }
+            catch(TelegramApiException e)
+            {
+                PlayerListPlugin.logToConsole("TelegramApiException occurred when trying to send chat listener message", Level.SEVERE);
+            }
+        }
     }
 }

@@ -25,4 +25,6 @@ public class Config
     {
         config.set("telegram.token", arg);
     }
+
+    public static int getTelegramAdmin() { return config.getInt("telegram.admin", -1); }
 }
