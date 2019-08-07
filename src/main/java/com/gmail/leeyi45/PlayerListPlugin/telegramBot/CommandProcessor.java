@@ -3,11 +3,10 @@ package com.gmail.leeyi45.PlayerListPlugin.telegramBot;
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Collection;
 
 class CommandProcessor
 {
@@ -18,7 +17,7 @@ class CommandProcessor
             case "status": return statusCommand();
             case "players": return playersCommand();
             case "help": return helpCommand();
-            case "chat": return chatListenerCommand(msg, args);
+            case "chat": return chatCommand(msg, args);
             default: return String.format("Unknown command '%s'", args[0]);
         }
     }
@@ -43,17 +42,17 @@ class CommandProcessor
     //!players command
     private static String playersCommand()
     {
-        ArrayList<String> players = PlayerListPlugin.getPlayerList();
+        Collection<? extends Player> players = PlayerListPlugin.getPlayerList();
 
         if(players.size() == 0) return "There are no players on the server";
         else
         {
-            StringBuilder outputStr = new StringBuilder("<b>Players on the server:</b>\n\n");
+            var outputStr = new StringBuilder("<b>Players on the server:</b>\n\n");
 
             int i = 1;
-            for (String str : players)
+            for (Player player : players)
             {
-                outputStr.append(String.format("%d. %s\n", i, str));
+                outputStr.append(String.format("%d. %s\n", i, player.getDisplayName()));
                 i++;
             }
 
@@ -62,7 +61,7 @@ class CommandProcessor
     }
 
     //!chat command
-    private static String chatListenerCommand(Message msg, String[] args)
+    private static String chatCommand(Message msg, String[] args)
     {
         if(args.length > 1)
         {

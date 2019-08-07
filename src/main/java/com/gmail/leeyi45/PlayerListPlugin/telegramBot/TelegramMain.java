@@ -143,7 +143,8 @@ public class TelegramMain extends TelegramLongPollingBot
             try { bot.execute(send); }
             catch(TelegramApiException e)
             {
-                PlayerListPlugin.logToConsole("TelegramApiException occurred when trying to send chat listener message", Level.SEVERE);
+                PlayerListPlugin.logToConsole("TelegramApiException occurred when trying to send chat listener message: "
+                        + e.getMessage(), Level.SEVERE);
             }
         }
     }

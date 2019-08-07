@@ -2,14 +2,10 @@ package com.gmail.leeyi45.PlayerListPlugin.pluginMain.commands;
 
 import com.gmail.leeyi45.PlayerListPlugin.discordBot.DiscordMain;
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
-import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
 import com.gmail.leeyi45.PlayerListPlugin.telegramBot.TelegramMain;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
 
 public class PlayerlistCommand implements CommandExecutor
 {
@@ -22,8 +18,7 @@ public class PlayerlistCommand implements CommandExecutor
         {
             case "discord":
             {
-                if(sender instanceof Player &&
-                    !sender.hasPermission("playerlist.discord"))
+                if(!sender.hasPermission("playerlist.discord"))
                 {
                     sender.sendMessage("You do not have permission to use this command");
                     return true;
@@ -33,27 +28,12 @@ public class PlayerlistCommand implements CommandExecutor
             case "tele":
             case "telegram":
             {
-                if(sender instanceof Player &&
-                        !sender.hasPermission("playerlist.telegram"))
+                if(!sender.hasPermission("playerlist.telegram"))
                 {
                     sender.sendMessage("You do not have permission to use this command");
                     return true;
                 }
                 else return telegramCommand(args, sender);
-            }
-            case "update":
-            {
-                sender.sendMessage("Updating the internal player list");
-
-                ArrayList<String> newList = new ArrayList<>();
-                for (Player player: PlayerListPlugin.getInstance().getServer().getOnlinePlayers())
-                {
-                    newList.add(player.getDisplayName());
-                }
-
-                PlayerListPlugin.setPlayerList(newList);
-                DiscordMain.updateBot();
-                return true;
             }
             default: return false;
         }
@@ -160,7 +140,7 @@ public class PlayerlistCommand implements CommandExecutor
                             if(args[2].equalsIgnoreCase("set"))
                             {
                                 sender.sendMessage("Setting discord token to: " + args[3]);
-                                Config.setDiscordToken(args[4]);
+                                Config.setDiscordToken(args[3]);
                             }
                             else sender.sendMessage("Usage: /playerlist discord token set <token>");
                             break;

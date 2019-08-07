@@ -15,24 +15,16 @@ import java.util.logging.Logger;
 public class PlayerListPlugin extends JavaPlugin
 {
     private Logger logger;
-    private static ArrayList<String> playerList;
     private static PlayerListPlugin instance;
 
     public static void logToConsole(String text, Level level) { instance.logger.log(level, text); }
 
-    public static void setPlayerList(ArrayList<String> list) { playerList = list; }
-
-    public static ArrayList<String> getPlayerList()
+    public static Collection<? extends Player> getPlayerList()
     {
-        var output = new ArrayList<String>();
-        for(Player p : instance.getServer().getOnlinePlayers())
-        {
-            output.add(p.getDisplayName());
-        }
-        return output;
+        return instance.getServer().getOnlinePlayers();
     }
 
-    public static int getPlayerCount() { return playerList.size(); }
+    public static int getPlayerCount() { return getPlayerList().size(); }
 
     public static PlayerListPlugin getInstance() { return instance; }
 
@@ -44,7 +36,6 @@ public class PlayerListPlugin extends JavaPlugin
         instance = this;
 
         logger = getLogger();
-        playerList = new ArrayList<>();
 
         logToConsole("Enabling PlayerListPlugin!", Level.INFO);
 
@@ -57,12 +48,6 @@ public class PlayerListPlugin extends JavaPlugin
 
         registerCommands();
         registerEvents();
-
-        //We add all players to the list
-        for (Player player: PlayerListPlugin.getInstance().getServer().getOnlinePlayers())
-        {
-            playerList.add(player.getDisplayName());
-        }
     }
 
     @Override
