@@ -19,14 +19,9 @@ public class PlayerListPlugin extends JavaPlugin
 
     public static void logToConsole(String text, Level level) { instance.logger.log(level, text); }
 
-    public static Collection<? extends Player> getPlayerList()
-    {
-        return instance.getServer().getOnlinePlayers();
-    }
+    public static Collection<? extends Player> getPlayerList() { return instance.getServer().getOnlinePlayers();}
 
     public static int getPlayerCount() { return getPlayerList().size(); }
-
-    public static PlayerListPlugin getInstance() { return instance; }
 
     public static ConsoleCommandSender getConsoleSender() { return instance.getServer().getConsoleSender(); }
 
@@ -37,17 +32,17 @@ public class PlayerListPlugin extends JavaPlugin
 
         logger = getLogger();
 
-        logToConsole("Enabling PlayerListPlugin!", Level.INFO);
+        //logToConsole("Enabling PlayerListPlugin!", Level.INFO);
 
         //Basic setup
         Config.setConfig(getConfig());
 
+        registerCommands();
+        registerEvents();
+
         //Start the bots
         DiscordMain.startThread(getConsoleSender());
         TelegramMain.startThread(getConsoleSender());
-
-        registerCommands();
-        registerEvents();
     }
 
     @Override

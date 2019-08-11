@@ -53,10 +53,7 @@ public class TelegramMain extends TelegramLongPollingBot
 
                 if(!reply.isEmpty() && !reply.isBlank())
                 {
-                    var send = new SendMessage()
-                            .setText(reply)
-                            .enableHtml(true)
-                            .setChatId(msg.getChatId());
+                    var send = new SendMessage(msg.getChatId(), reply).enableHtml(true);
 
                     try { execute(send); }
                     catch(TelegramApiException e)
@@ -66,7 +63,7 @@ public class TelegramMain extends TelegramLongPollingBot
                 }
             }
             //Telegram messages sent to server
-            else if(chatListening && msg.getFrom().getId() == (long)Config.getTelegramAdmin())
+            else if(chatListening && msg.getFrom().getId() == Config.getTelegramAdmin())
             {
                 Bukkit.broadcastMessage("[Server] " + msgText);
             }
@@ -136,10 +133,9 @@ public class TelegramMain extends TelegramLongPollingBot
     {
         if(initialized)
         {
-            var send = new SendMessage()
-                    .setText(msg)
-                    .enableHtml(true)
-                    .setChatId((long) Config.getTelegramAdmin());
+            var send = new SendMessage(Config.getTelegramAdmin(), msg)
+                    .enableHtml(true);
+
             try { bot.execute(send); }
             catch(TelegramApiException e)
             {
