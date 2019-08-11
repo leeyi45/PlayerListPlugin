@@ -26,7 +26,7 @@
                     <forceCreation>true</forceCreation>
                     <archive>
                         <manifestEntries>
-                            <Class-Path>./lib/telegrambots-${telegram.version}-jar-with-dependencies.jar ./lib/JDA-${discord.version}-withDependencies.jar</Class-Path>
+                            <Class-Path>./PlayerListPlugin/telegrambots-${telegram.version}-jar-with-dependencies.jar ./PlayerListPlugin/JDA-${discord.version}-withDependencies.jar</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>

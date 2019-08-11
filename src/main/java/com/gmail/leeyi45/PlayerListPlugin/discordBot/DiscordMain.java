@@ -12,9 +12,9 @@ import org.bukkit.command.CommandSender;
 public class DiscordMain
 {
     private static JDA bot;
-    private static Boolean initialized = false;
+    private static boolean initialized = false;
 
-    public static Boolean getInitialized() { return initialized; }
+    public static boolean getInitialized() { return initialized; }
 
     public static void startThread(CommandSender sender)
     {
@@ -23,7 +23,8 @@ public class DiscordMain
             bot.shutdown();
         }
 
-        new Thread(() -> {
+        new Thread(() ->
+        {
             try
             {
                 String token = Config.getDiscordToken();
@@ -31,12 +32,12 @@ public class DiscordMain
                 sender.sendMessage("Beginning discord bot initialization using " + token);
                 bot = new JDABuilder(token).build();
 
-                registerListeners();
+                bot.addEventListener(new MessageListener());
 
                 sender.sendMessage("Discord bot initialized");
                 initialized = true;
 
-                updateBot();
+                updateBot(sender);
             }
             catch(javax.security.auth.login.LoginException e)
             {
@@ -58,9 +59,11 @@ public class DiscordMain
         }
     }
 
-    public static void updateBot()
+    public static void updateBot(CommandSender sender)
     {
         if(!initialized) return;
+
+        sender.sendMessage("Updating discord bot");
 
         int count = PlayerListPlugin.getPlayerCount();
         Presence presence = bot.getPresence();
@@ -75,10 +78,5 @@ public class DiscordMain
             presence.setGame(Game.of(Game.GameType.DEFAULT, String.format("with %d player%s", count, count == 1 ? "" : "s")));
             presence.setStatus(OnlineStatus.ONLINE);
         }
-    }
-
-    private static void registerListeners()
-    {
-        bot.addEventListener(new MessageListener());
     }
 }

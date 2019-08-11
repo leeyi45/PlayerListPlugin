@@ -13,13 +13,13 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        DiscordMain.updateBot();
+        DiscordMain.updateBot(PlayerListPlugin.getConsoleSender());
     }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event)
     {
-        DiscordMain.updateBot();
+        DiscordMain.updateBot(PlayerListPlugin.getConsoleSender());
     }
 
     @EventHandler
