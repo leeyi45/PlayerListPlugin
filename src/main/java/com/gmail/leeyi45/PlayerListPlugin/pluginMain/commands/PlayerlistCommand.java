@@ -35,6 +35,38 @@ public class PlayerlistCommand implements CommandExecutor
                 }
                 else return telegramCommand(args, sender);
             }
+            case "ip":
+            {
+                if(args.length >= 2)
+                {
+                    switch(args[1].toLowerCase())
+                    {
+                        case "set":
+                        {
+                            if(args.length != 3) sender.sendMessage("Usage: /playerlist ip set <ip>");
+                            else
+                            {
+                                Config.setIP_String(args[2]);
+                                sender.sendMessage("Set IP address to " + args[2]);
+                            }
+                            break;
+                        }
+                        case "get":
+                        {
+                            sender.sendMessage("Current IP address is " + Config.getIP_String());
+                            break;
+                        }
+                        default:
+                        {
+                            sender.sendMessage("Usage: /playerlist ip <set|get>");
+                            break;
+                        }
+                    }
+                }
+                else sender.sendMessage("Usage: /playerlist ip <set|get>");
+
+                return true;
+            }
             default: return false;
         }
     }

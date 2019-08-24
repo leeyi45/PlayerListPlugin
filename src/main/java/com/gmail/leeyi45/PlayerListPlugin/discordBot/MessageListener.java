@@ -18,19 +18,20 @@ public class MessageListener extends ListenerAdapter
         {
             Message msg = event.getMessage();
             String msgText = msg.getContentStripped();
+            String prefix = Config.discordCommandPrefix();
 
-            if(msgText.startsWith(Config.discordCommandPrefix()))
+            if(msgText.startsWith(prefix))
             { //Message is actually a command
 
                 //We remove the command prefix
-                String[] args = msgText.substring(1).split(" ");
+                String[] args = msgText.substring(prefix.length()).split(" ");
 
                 //And then we send everything to the processor
                 String reply = CommandProcessor.processCommand(msg, args);
 
                 //And reply to the channel that sent it
                 event.getTextChannel().sendMessage(reply).queue();
-                PlayerListPlugin.logToConsole(String.format("Command '%s' received from user '%s' from channel '%s'",
+                PlayerListPlugin.logToConsole(String.format("Discord Command '%s' received from user '%s' from channel '%s'",
                         args[0], event.getMember().getEffectiveName(), event.getChannel().getName()), Level.INFO);
             }
         }

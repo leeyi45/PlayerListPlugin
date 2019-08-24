@@ -44,10 +44,10 @@ public class TelegramMain extends TelegramLongPollingBot
                 if(args[0].contains("@" + getBotUsername()))
                 { //We need to remove the username string
                     Matcher matcher = Pattern.compile(".+?(?=@)").matcher(args[0]);
-                    args[0] = matcher.group(1);
+                    args[0] = matcher.group(0);
                 }
 
-                PlayerListPlugin.logToConsole(String.format("Command '%s' received from '%s'", args[0], msg.getFrom().getUserName()), Level.INFO);
+                PlayerListPlugin.logToConsole(String.format("Telegram Command '%s' received from '%s'", args[0], msg.getFrom().getUserName()), Level.INFO);
 
                 String reply = CommandProcessor.processCommand(msg, args);
 

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +20,7 @@ public class PlayerListPlugin extends JavaPlugin
 
     public static void logToConsole(String text, Level level) { instance.logger.log(level, text); }
 
-    public static Collection<? extends Player> getPlayerList() { return instance.getServer().getOnlinePlayers();}
+    public static Collection<? extends Player> getPlayerList() { return instance.getServer().getOnlinePlayers(); }
 
     public static int getPlayerCount() { return getPlayerList().size(); }
 
@@ -51,6 +52,9 @@ public class PlayerListPlugin extends JavaPlugin
         //Don't forget to stop the bots before we shut the plugin down
         DiscordMain.stopBot(getConsoleSender());
         TelegramMain.stopBot(getConsoleSender());
+
+        try { Config.configSave(); }
+        catch(IOException e) { getConsoleSender().sendMessage("Failed to save config file"); }
     }
 
     private void registerCommands()

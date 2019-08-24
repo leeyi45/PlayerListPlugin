@@ -63,7 +63,7 @@ public class DiscordMain
     {
         if(!initialized) return;
 
-        sender.sendMessage("Updating discord bot");
+        sender.sendMessage("Updating discord bot player count status");
 
         int count = PlayerListPlugin.getPlayerCount();
         Presence presence = bot.getPresence();

@@ -27,7 +27,7 @@ public class PlayerListener implements Listener
     {
         if(TelegramMain.getChatListening())
         {
-            TelegramMain.chatListenerMessage(e.getFormat());
+            TelegramMain.chatListenerMessage(e.getMessage());
         }
     }
 }
