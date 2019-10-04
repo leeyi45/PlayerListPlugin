@@ -2,13 +2,10 @@ package com.gmail.leeyi45.PlayerListPlugin.telegramBot;
 
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.Config;
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Collection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 class CommandProcessor
 {
@@ -35,10 +32,10 @@ class CommandProcessor
     //!status command
     private static String statusCommand()
     {
-        Matcher matcher = Pattern.compile("1\\.(\\d{1,2})(\\.\\d)?").matcher(Bukkit.getServer().getVersion());
+        //Matcher matcher = Pattern.compile("1\\.(\\d{1,2})(\\.\\d)?").matcher(Bukkit.getServer().getVersion());
 
         return String.format("Server is currently running version <b>%s</b> at IP address: <b>%s</b>",
-                matcher.group(0), Config.getIP_String());
+                "1.14.4", Config.getIP_String());
     }
 
     //!players command
