@@ -37,6 +37,12 @@ public class PlayerlistCommand implements CommandExecutor
             }
             case "ip":
             {
+                if(!sender.hasPermission("playerlist.ip"))
+                {
+                    sender.sendMessage("You do not have permission to use this command");
+                    return true;
+                }
+
                 if(args.length >= 2)
                 {
                     switch(args[1].toLowerCase())
@@ -99,12 +105,20 @@ public class PlayerlistCommand implements CommandExecutor
                     {
                         case 2:
                         {
-                            sender.sendMessage("Telegram token is " + Config.getTelegramToken());
+                            sender.sendMessage("Usage: /playerlist telegram token <set|get>");
                             break;
                         }
                         case 3:
                         {
-                            sender.sendMessage("Usage: /playerlist telegram token set <token>");
+                            if(args[2].equalsIgnoreCase("get"))
+                            {
+                                sender.sendMessage("Telegram token is " + Config.getTelegramToken());
+                            }
+                            else if(args[2].equalsIgnoreCase("set"))
+                            {
+                                sender.sendMessage("Usage: /playerlist telegram token set <token>");
+                            }
+                            else sender.sendMessage("Usage: /playerlist telegram token <set|get>");
                             break;
                         }
                         case 4:
@@ -159,12 +173,20 @@ public class PlayerlistCommand implements CommandExecutor
                     {
                         case 2:
                         {
-                            sender.sendMessage("Discord token is " + Config.getDiscordToken());
+                            sender.sendMessage("Usage: /playerlist discord token <get|set>");
                             break;
                         }
                         case 3:
                         {
-                            sender.sendMessage("Usage: /playerlist discord token set <token>");
+                            if(args[2].equalsIgnoreCase("get"))
+                            {
+                                sender.sendMessage("Discord token is " + Config.getDiscordToken());
+                            }
+                            else if(args[2].equalsIgnoreCase("set"))
+                            {
+                                sender.sendMessage("Usage: /playerlist discord token set <token>");
+                            }
+                            else sender.sendMessage("Usage: /playerlist discord token <get|set>");
                             break;
                         }
                         case 4:
