@@ -2,6 +2,7 @@ package com.gmail.leeyi45.PlayerListPlugin.pluginMain;
 
 import com.gmail.leeyi45.PlayerListPlugin.pluginMain.commands.PlayerlistCommand;
 import com.gmail.leeyi45.PlayerListPlugin.discordBot.DiscordMain;
+import com.gmail.leeyi45.PlayerListPlugin.pluginMain.commands.PlayerlistTabCompleter;
 import com.gmail.leeyi45.PlayerListPlugin.telegramBot.TelegramMain;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -59,27 +60,10 @@ public class PlayerListPlugin extends JavaPlugin
 
     private void registerCommands()
     {
-        /*
-        var dict = new HashMap<String, CommandExecutor>();
-
-        dict.put("playerlist", new PlayerlistCommand());
-
-        for(var item : dict.entrySet())
-        {
-            try
-            {
-                //getCommand(item.getKey()).setExecutor(item.getValue());
-                getCommand("playerlist").setExecutor(new PlayerlistCommand());
-            }
-            catch(NullPointerException e)
-            {
-                logToConsole(String.format("Error occurred when registering command '%s' check plugin yml",
-                        item.getKey()), Level.SEVERE);
-            }
-        }*/
         try
         {
             getCommand("playerlist").setExecutor(new PlayerlistCommand());
+            getCommand("playerlist").setTabCompleter(new PlayerlistTabCompleter());
         }
         catch(NullPointerException e)
         {
