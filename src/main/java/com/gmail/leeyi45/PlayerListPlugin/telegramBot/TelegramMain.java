@@ -14,8 +14,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.BotSession;
 
 import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class TelegramMain extends TelegramLongPollingBot
 {
@@ -41,10 +39,9 @@ public class TelegramMain extends TelegramLongPollingBot
             {
                 String[] args = msgText.substring(1).split(" ");
 
-                if(args[0].contains("@" + getBotUsername()))
+                if(args[0].endsWith("@" + getBotUsername()))
                 { //We need to remove the username string
-                    Matcher matcher = Pattern.compile(".+?(?=@)").matcher(args[0]);
-                    args[0] = matcher.group(0);
+                    args[0] = args[0].substring(0, args[0].length() - getBotUsername().length() - 1);
                 }
 
                 PlayerListPlugin.logToConsole(String.format("Telegram Command '%s' received from '%s'", args[0], msg.getFrom().getUserName()), Level.INFO);
