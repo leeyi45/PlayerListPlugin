@@ -17,6 +17,8 @@ class CommandProcessor
             case "players": return playersCommand();
             case "help": return helpCommand();
             case "chat": return chatCommand(msg, args);
+            case "register": return registerCommand(msg.getFrom().getId());
+            case "unregister": return unregisterCommand(msg.getFrom().getId());
             default: return String.format("Unknown command '%s'", args[0]);
         }
     }
@@ -26,6 +28,8 @@ class CommandProcessor
     {
         return "status - Displays the server status\n" +
                 "players - Lists online players\n" +
+                "register - The server will notify you when it starts\n" +
+                "unregister - Unregister from the startup notification\n" +
                 "help - Displays this command";
     }
 
@@ -79,5 +83,45 @@ class CommandProcessor
             else return "You do not have permission to use this command";
         }
         else return "Usage: /chat {toggle|status}";
+    }
+
+    //!register command
+    private static String registerCommand(long id)
+    {
+        var notifys = Config.getTelegramNotifys();
+
+        if(notifys.contains(id)) return "You have already registered for the startup message!";
+        else
+        {
+            try
+            {
+                Config.addTelegramNotify(id);
+                return "Successfully registered for the startup message!";
+            }
+            catch(Exception e)
+            {
+                return "Error occurred when registering for message: " + e.getMessage();
+            }
+        }
+    }
+
+    //!unregister command
+    private static String unregisterCommand(long id)
+    {
+        var notifys = Config.getTelegramNotifys();
+
+        if(!notifys.contains(id)) return "You have not registered for the startup message!";
+        else
+        {
+            try
+            {
+                Config.removeTelegramNotify(id);
+                return "Successfully unregistered for the startup message!";
+            }
+            catch(Exception e)
+            {
+                return "Error occurred while unregistering from message: " + e.getMessage();
+            }
+        }
     }
 }

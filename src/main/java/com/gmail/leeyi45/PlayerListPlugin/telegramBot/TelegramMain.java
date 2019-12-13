@@ -141,4 +141,24 @@ public class TelegramMain extends TelegramLongPollingBot
             }
         }
     }
+
+    public static void onServerStart()
+    {
+        if (!initialized) return;
+
+        var notifys = Config.getTelegramNotifys();
+        if(notifys.size() == 0) return;
+
+        for(var id : notifys)
+        {
+            var send = new SendMessage(id, "The minecraft server has been started!");
+
+            try { bot.execute(send); }
+            catch(TelegramApiException e)
+            {
+                PlayerListPlugin.logToConsole("TelegramApiException occurred when trying to send notify message: "
+                        + e.getMessage(), Level.SEVERE);
+            }
+        }
+    }
 }

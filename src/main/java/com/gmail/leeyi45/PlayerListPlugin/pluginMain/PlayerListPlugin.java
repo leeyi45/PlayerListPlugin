@@ -45,6 +45,7 @@ public class PlayerListPlugin extends JavaPlugin
         //Start the bots
         DiscordMain.startThread(getConsoleSender());
         TelegramMain.startThread(getConsoleSender());
+        TelegramMain.onServerStart();
     }
 
     @Override
@@ -75,6 +76,5 @@ public class PlayerListPlugin extends JavaPlugin
     {
         PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new PlayerListener(), this);
-
     }
 }
