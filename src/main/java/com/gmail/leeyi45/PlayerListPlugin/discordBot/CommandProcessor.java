@@ -45,7 +45,7 @@ class CommandProcessor
         if(players.size() == 0) return "There are no players on the server";
         else
         {
-            var outputStr = new StringBuilder("Players on the server:\n\n");
+            StringBuilder outputStr = new StringBuilder("Players on the server:\n\n");
 
             int i = 1;
             for (Player player : players)

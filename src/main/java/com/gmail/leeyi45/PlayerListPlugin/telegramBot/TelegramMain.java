@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.BotSession;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 public class TelegramMain extends TelegramLongPollingBot
@@ -48,9 +49,9 @@ public class TelegramMain extends TelegramLongPollingBot
 
                 String reply = CommandProcessor.processCommand(msg, args);
 
-                if(!reply.isEmpty() && !reply.isBlank())
+                if(reply != null)
                 {
-                    var send = new SendMessage(msg.getChatId(), reply).enableHtml(true);
+                    SendMessage send = new SendMessage(msg.getChatId(), reply).enableHtml(true);
 
                     try { execute(send); }
                     catch(TelegramApiException e)
@@ -130,7 +131,7 @@ public class TelegramMain extends TelegramLongPollingBot
     {
         if(initialized)
         {
-            var send = new SendMessage(Config.getTelegramAdmin(), msg)
+            SendMessage send = new SendMessage(Config.getTelegramAdmin(), msg)
                     .enableHtml(true);
 
             try { bot.execute(send); }
@@ -146,12 +147,12 @@ public class TelegramMain extends TelegramLongPollingBot
     {
         if (!initialized) return;
 
-        var notifys = Config.getTelegramNotifys();
+        ArrayList<Long> notifys = Config.getTelegramNotifys();
         if(notifys.size() == 0) return;
 
-        for(var id : notifys)
+        for(Long id : notifys)
         {
-            var send = new SendMessage(id, "The minecraft server has been started!");
+            SendMessage send = new SendMessage(id, "The minecraft server has been started!");
 
             try { bot.execute(send); }
             catch(TelegramApiException e)

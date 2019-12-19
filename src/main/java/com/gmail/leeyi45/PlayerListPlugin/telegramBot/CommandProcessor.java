@@ -5,6 +5,7 @@ import com.gmail.leeyi45.PlayerListPlugin.pluginMain.PlayerListPlugin;
 import org.bukkit.entity.Player;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 class CommandProcessor
@@ -50,7 +51,7 @@ class CommandProcessor
         if(players.size() == 0) return "There are no players on the server";
         else
         {
-            var outputStr = new StringBuilder("<b>Players on the server:</b>\n\n");
+            StringBuilder outputStr = new StringBuilder("<b>Players on the server:</b>\n\n");
 
             int i = 1;
             for (Player player : players)
@@ -88,7 +89,7 @@ class CommandProcessor
     //!register command
     private static String registerCommand(long id)
     {
-        var notifys = Config.getTelegramNotifys();
+        ArrayList<Long> notifys = Config.getTelegramNotifys();
 
         if(notifys.contains(id)) return "You have already registered for the startup message!";
         else
@@ -108,7 +109,7 @@ class CommandProcessor
     //!unregister command
     private static String unregisterCommand(long id)
     {
-        var notifys = Config.getTelegramNotifys();
+        ArrayList<Long> notifys = Config.getTelegramNotifys();
 
         if(!notifys.contains(id)) return "You have not registered for the startup message!";
         else

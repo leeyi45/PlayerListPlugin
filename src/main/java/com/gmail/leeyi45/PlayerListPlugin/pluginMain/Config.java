@@ -1,9 +1,11 @@
 package com.gmail.leeyi45.PlayerListPlugin.pluginMain;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Config
 {
@@ -46,11 +48,11 @@ public class Config
     public static ArrayList<Long> getTelegramNotifys()
     {
         if(!config.contains("telegram.notifys")) return new ArrayList<>();
-        var notifySection = config.getConfigurationSection("telegram.notifys");
+        ConfigurationSection notifySection = config.getConfigurationSection("telegram.notifys");
 
-        var list = new ArrayList<Long>();
+        ArrayList<Long> list = new ArrayList<>();
 
-        for(var each : notifySection.getValues(false).entrySet())
+        for(Map.Entry<String, Object> each : notifySection.getValues(false).entrySet())
         {
             if((int)each.getValue() == 1) list.add(Long.parseLong(each.getKey()));
         }
@@ -59,7 +61,7 @@ public class Config
 
     public static void addTelegramNotify(long id)
     {
-        var notifySection = config.contains("telegram.notifys") ?
+        ConfigurationSection notifySection = config.contains("telegram.notifys") ?
                 config.getConfigurationSection("telegram.notifys") : config.createSection("telegram.notifys");
         notifySection.set(String.valueOf(id), 1);
         changesMade = true;
@@ -67,7 +69,7 @@ public class Config
 
     public static void removeTelegramNotify(long id)
     {
-        var notifySection = config.getConfigurationSection("telegram.notifys");
+        ConfigurationSection notifySection = config.getConfigurationSection("telegram.notifys");
         notifySection.set(String.valueOf(id), 0);
         changesMade = true;
     }
