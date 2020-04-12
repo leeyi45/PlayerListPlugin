@@ -34,7 +34,7 @@ class CommandProcessor
     private static String statusCommand()
     {
         return String.format("Server is currently running version %s at IP address: %s",
-                Bukkit.getServer().getVersion(), Config.getIP_String());
+                PlayerListPlugin.getVersionString(), Config.getIP_String());
     }
 
     //!players command

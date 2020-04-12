@@ -11,6 +11,7 @@ public class Config
 {
     private static FileConfiguration config;
     private static boolean changesMade = false;
+    public final static String version = "1.15.1";
 
     public static String discordCommandPrefix() { return config.getString("discord.command-prefix", "!"); }
 

@@ -15,9 +15,9 @@ public class PlayerlistTabCompleter implements TabCompleter
     {
         switch(args.length)
         {
-            case 0: return Arrays.asList("discord", "telegram", "ip");
-            case 1: return Arrays.asList("status", "disconnect", "reconnect", "token");
-            case 2:
+            case 1: return Arrays.asList("discord", "telegram", "ip");
+            case 2: return Arrays.asList("status", "disconnect", "reconnect", "token");
+            case 3:
             {
                 if(args[1].equalsIgnoreCase("token")) return Arrays.asList("set", "get");
                 else return null;

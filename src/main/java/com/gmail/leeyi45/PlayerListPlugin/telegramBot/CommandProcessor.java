@@ -40,7 +40,7 @@ class CommandProcessor
         //Matcher matcher = Pattern.compile("1\\.(\\d{1,2})(\\.\\d)?").matcher(Bukkit.getServer().getVersion());
 
         return String.format("Server is currently running version <b>%s</b> at IP address: <b>%s</b>",
-                "1.14.4", Config.getIP_String());
+                PlayerListPlugin.getVersionString(), Config.getIP_String());
     }
 
     //!players command
